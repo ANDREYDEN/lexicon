@@ -1,37 +1,42 @@
+import { File, Paths } from "expo-file-system";
 import { Word } from "../types/word";
 
-const words: Word[] = [
-  {
-    content: "serendipity",
-    definition:
-      "the occurrence and development of events by chance in a happy or beneficial way.",
-    createdAt: new Date("2024-01-01"),
-  },
-  {
-    content: "ephemeral",
-    definition: "lasting for a very short time.",
-    createdAt: new Date("2024-02-01"),
-  },
-  {
-    content: "quintessential",
-    definition:
-      "representing the most perfect or typical example of a quality or class.",
-    createdAt: new Date("2024-03-01"),
-  },
-];
+async function getAll() {
+  const file = new File(Paths.document, "words.json");
+  if (!file.exists) {
+    file.create();
+    file.write("[]");
+    return Promise.resolve([]);
+  }
+  const textContent = await file.text();
+  try {
+    return JSON.parse(textContent) as Word[];
+  } catch (error) {
+    console.error("Failed to parse words.json:", error);
+    return [];
+  }
+}
 
-function getAll() {
-  return Promise.resolve([...words]);
+function setAll(words: Word[]) {
+  const file = new File(Paths.document, "words.json");
+  if (!file.exists) {
+    file.create();
+  }
+  file.write(JSON.stringify(words));
 }
 
 async function create(word: Word) {
+  const words = await getAll();
   words.push(word);
+  setAll(words);
 }
 
 async function remove(word: Word) {
+  const words = await getAll();
   const index = words.findIndex((w) => w.content === word.content);
   if (index !== -1) {
     words.splice(index, 1);
+    setAll(words);
   }
 }
 

@@ -6,6 +6,10 @@ Lexicon is a minimalistic app to help you learn new words. It's fully local to y
 
 - [x] Create word
 - [x] Delete word
-- [ ] Persistence layer
+- [x] Persistence layer
+- [ ] Style Add Form
+- [ ] Add Form Validation
+- [x] List empty state
+- [ ] Theming & Dark mode
 - [ ] Schedule notifications
 - [ ] Handle notification opening the app

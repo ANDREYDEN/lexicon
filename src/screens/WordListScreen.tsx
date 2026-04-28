@@ -1,5 +1,5 @@
 import { use } from "react";
-import { FlatList } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { WordListItem } from "../components/WordListItem";
 import { WordsContext } from "../providers/wordsProvider";
 
@@ -8,9 +8,31 @@ export function WordListScreen() {
 
   return (
     <FlatList
+      contentContainerStyle={{ flexGrow: 1 }}
       data={words}
       keyExtractor={(item) => item.content}
       renderItem={({ item }) => <WordListItem word={item} />}
+      ListEmptyComponent={EmptyWordList}
     />
   );
 }
+
+function EmptyWordList() {
+  return (
+    <View style={styles.emptyListContainer}>
+      <Text style={styles.emptyListText}>Start by adding a word</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  emptyListContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyListText: {
+    fontSize: 32,
+    color: "#888",
+  },
+});
