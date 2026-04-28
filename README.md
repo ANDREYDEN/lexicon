@@ -14,3 +14,5 @@ Lexicon is a minimalistic app to help you learn new words. It's fully local to y
 - [ ] Theming & Dark mode
 - [ ] Schedule notifications
 - [ ] Handle notification opening the app
+- [ ] Import/Export
+- [ ] Icon, deployment
