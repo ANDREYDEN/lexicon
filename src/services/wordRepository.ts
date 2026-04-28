@@ -21,5 +21,5 @@ const words: Word[] = [
 ];
 
 export function getWords() {
-  return words;
+  return Promise.resolve(words);
 }

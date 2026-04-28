@@ -1,9 +1,11 @@
+import { use } from "react";
 import { FlatList } from "react-native";
 import { WordListItem } from "../components/WordListItem";
-import { Word } from "../types/word";
-
+import { WordsContext } from "../providers/wordsProvider";
 
 export function WordListScreen() {
+  const { words } = use(WordsContext);
+
   return (
     <FlatList
       data={words}
