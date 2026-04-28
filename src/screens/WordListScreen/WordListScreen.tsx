@@ -1,7 +1,7 @@
+import { WordsContext } from "@/src/providers/wordsProvider";
 import { use } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { WordListItem } from "../components/WordListItem";
-import { WordsContext } from "../providers/wordsProvider";
+import { WordListItem } from "./components/WordListItem";
 
 export function WordListScreen() {
   const { words } = use(WordsContext);
