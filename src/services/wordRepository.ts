@@ -28,7 +28,15 @@ async function create(word: Word) {
   words.push(word);
 }
 
+async function remove(word: Word) {
+  const index = words.findIndex((w) => w.content === word.content);
+  if (index !== -1) {
+    words.splice(index, 1);
+  }
+}
+
 export const wordRepository = {
   getAll,
   create,
+  remove,
 };

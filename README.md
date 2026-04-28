@@ -4,7 +4,8 @@ Lexicon is a minimalistic app to help you learn new words. It's fully local to y
 
 ## TODO
 
-- [ ] Create word
-- [ ] Delete word
+- [x] Create word
+- [x] Delete word
+- [ ] Persistence layer
 - [ ] Schedule notifications
 - [ ] Handle notification opening the app

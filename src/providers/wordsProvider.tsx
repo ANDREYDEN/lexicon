@@ -6,12 +6,14 @@ interface WordsContextValue {
   words: Word[];
   loadWords: () => Promise<void>;
   createWord: (word: Word) => Promise<void>;
+  deleteWord: (word: Word) => Promise<void>;
 }
 
 const initialWordsContextValue: WordsContextValue = {
   words: [],
   loadWords: async () => {},
   createWord: async () => {},
+  deleteWord: async () => {},
 };
 export const WordsContext = createContext<WordsContextValue>(
   initialWordsContextValue,
@@ -30,12 +32,18 @@ export function WordsProvider({ children }: { children: React.ReactNode }) {
     await wordRepository.create(word);
   };
 
+  const deleteWord = async (word: Word) => {
+    setWords((prev) => prev.filter((w) => w.content !== word.content));
+    await wordRepository.remove(word);
+  }
+
   return (
     <WordsContext
       value={{
         words,
         loadWords,
         createWord,
+        deleteWord,
       }}
     >
       {children}

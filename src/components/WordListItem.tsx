@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { use } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import Animated, {
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import { WordsContext } from "../providers/wordsProvider";
 import { Word } from "../types/word";
 
 interface WordListItemProps {
@@ -11,8 +13,19 @@ interface WordListItemProps {
 }
 
 export function WordListItem({ word }: WordListItemProps) {
+  const { deleteWord } = use(WordsContext);
+
+  const handleDelete = () => {
+    deleteWord(word);
+  };
+
   return (
-    <Swipeable renderRightActions={DeleteAction} friction={2}>
+    <Swipeable
+      renderRightActions={(_, drag) => (
+        <DeleteAction drag={drag} onDelete={handleDelete} />
+      )}
+      friction={2}
+    >
       <View style={styles.container}>
         <Text style={styles.content}>{word.content}</Text>
         <Text style={styles.definition}>{word.definition}</Text>
@@ -23,7 +36,12 @@ export function WordListItem({ word }: WordListItemProps) {
 
 const DELETE_ACTION_WIDTH = 80;
 
-function DeleteAction(_: SharedValue<number>, drag: SharedValue<number>) {
+interface DeleteActionProps {
+  drag: SharedValue<number>;
+  onDelete: () => void;
+}
+
+function DeleteAction({ drag, onDelete }: DeleteActionProps) {
   const styleAnimation = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: drag.value + DELETE_ACTION_WIDTH }],
@@ -32,7 +50,9 @@ function DeleteAction(_: SharedValue<number>, drag: SharedValue<number>) {
 
   return (
     <Animated.View style={[styleAnimation, styles.deleteContainer]}>
-      <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
+      <Pressable onPress={onDelete}>
+        <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
+      </Pressable>
     </Animated.View>
   );
 }
