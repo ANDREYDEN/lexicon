@@ -1,24 +1,33 @@
 import { createContext, useState } from "react";
-import { getWords } from "../services/wordRepository";
+import { wordRepository } from "../services/wordRepository";
 import { Word } from "../types/word";
 
 interface WordsContextValue {
   words: Word[];
   loadWords: () => Promise<void>;
+  createWord: (word: Word) => Promise<void>;
 }
 
 const initialWordsContextValue: WordsContextValue = {
   words: [],
   loadWords: async () => {},
+  createWord: async () => {},
 };
-export const WordsContext = createContext<WordsContextValue>(initialWordsContextValue);
+export const WordsContext = createContext<WordsContextValue>(
+  initialWordsContextValue,
+);
 
 export function WordsProvider({ children }: { children: React.ReactNode }) {
   const [words, setWords] = useState<Word[]>([]);
 
   const loadWords = async () => {
-    const loadedWords = await getWords();
+    const loadedWords = await wordRepository.getAll();
     setWords(loadedWords);
+  };
+
+  const createWord = async (word: Word) => {
+    setWords((prev) => [...prev, word]);
+    await wordRepository.create(word);
   };
 
   return (
@@ -26,6 +35,7 @@ export function WordsProvider({ children }: { children: React.ReactNode }) {
       value={{
         words,
         loadWords,
+        createWord,
       }}
     >
       {children}
