@@ -1,3 +1,5 @@
+import { WordsContext } from "@/src/providers/wordsProvider";
+import { Word } from "@/src/types/word";
 import { use } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
@@ -5,8 +7,6 @@ import Animated, {
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { WordsContext } from "../providers/wordsProvider";
-import { Word } from "../types/word";
 
 interface WordListItemProps {
   word: Word;
