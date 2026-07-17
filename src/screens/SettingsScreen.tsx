@@ -1,14 +1,42 @@
 import { use } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { LxButton } from "../components/LxButton";
 import { WordsContext } from "../providers/wordsProvider";
-import { exportService } from "../services/exportService";
+import * as ioService from "../services/ioService";
 
 export function SettingsScreen() {
-  const { words } = use(WordsContext);
+  const { words, importWords } = use(WordsContext);
 
   const handleExport = () => {
-    exportService.exportWords(words);
+    ioService.exportWords(words);
+  };
+
+  const handleImport = async () => {
+    let importedWords;
+    try {
+      importedWords = await ioService.pickWords();
+    } catch (error) {
+      const message =
+        error instanceof ioService.ImportError
+          ? error.message
+          : "Something went wrong while reading the file.";
+      Alert.alert("Import Failed", message);
+      return;
+    }
+    if (!importedWords) return;
+
+    Alert.alert(
+      "Import Data",
+      `This will replace your current ${words.length} word(s) with ${importedWords.length} word(s) from the file. This cannot be undone.`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Import",
+          style: "destructive",
+          onPress: () => importWords(importedWords),
+        },
+      ],
+    );
   };
 
   return (
@@ -18,6 +46,12 @@ export function SettingsScreen() {
         variant="secondary"
         icon="arrow-up-circle"
         onPress={handleExport}
+      />
+      <LxButton
+        title="Import Data"
+        variant="secondary"
+        icon="arrow-down-circle"
+        onPress={handleImport}
       />
     </View>
   );

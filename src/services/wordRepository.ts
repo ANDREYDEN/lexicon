@@ -1,7 +1,7 @@
 import { File, Paths } from "expo-file-system";
 import { Word } from "../types/word";
 
-async function getAll() {
+export async function getAll() {
   const file = new File(Paths.document, "words.json");
   if (!file.exists) {
     file.create();
@@ -17,7 +17,7 @@ async function getAll() {
   }
 }
 
-function setAll(words: Word[]) {
+export function setAll(words: Word[]) {
   const file = new File(Paths.document, "words.json");
   if (!file.exists) {
     file.create();
@@ -25,13 +25,13 @@ function setAll(words: Word[]) {
   file.write(JSON.stringify(words));
 }
 
-async function create(word: Word) {
+export async function create(word: Word) {
   const words = await getAll();
   words.push(word);
   setAll(words);
 }
 
-async function remove(word: Word) {
+export async function remove(word: Word) {
   const words = await getAll();
   const index = words.findIndex((w) => w.content === word.content);
   if (index !== -1) {
@@ -39,9 +39,3 @@ async function remove(word: Word) {
     setAll(words);
   }
 }
-
-export const wordRepository = {
-  getAll,
-  create,
-  remove,
-};

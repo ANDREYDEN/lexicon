@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { wordRepository } from "../services/wordRepository";
+import * as wordRepository from "../services/wordRepository";
 import { Word } from "../types/word";
 
 interface WordsContextValue {
@@ -7,6 +7,7 @@ interface WordsContextValue {
   loadWords: () => Promise<void>;
   createWord: (word: Word) => Promise<void>;
   deleteWord: (word: Word) => Promise<void>;
+  importWords: (words: Word[]) => Promise<void>;
 }
 
 const initialWordsContextValue: WordsContextValue = {
@@ -14,6 +15,7 @@ const initialWordsContextValue: WordsContextValue = {
   loadWords: async () => {},
   createWord: async () => {},
   deleteWord: async () => {},
+  importWords: async () => {},
 };
 export const WordsContext = createContext<WordsContextValue>(
   initialWordsContextValue,
@@ -35,7 +37,12 @@ export function WordsProvider({ children }: { children: React.ReactNode }) {
   const deleteWord = async (word: Word) => {
     setWords((prev) => prev.filter((w) => w.content !== word.content));
     await wordRepository.remove(word);
-  }
+  };
+
+  const importWords = async (importedWords: Word[]) => {
+    wordRepository.setAll(importedWords);
+    setWords(importedWords);
+  };
 
   return (
     <WordsContext
@@ -44,6 +51,7 @@ export function WordsProvider({ children }: { children: React.ReactNode }) {
         loadWords,
         createWord,
         deleteWord,
+        importWords,
       }}
     >
       {children}
