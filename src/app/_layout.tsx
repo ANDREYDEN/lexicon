@@ -4,8 +4,9 @@ import { WordsContext, WordsProvider } from "../providers/wordsProvider";
 
 import * as SplashScreen from "expo-splash-screen";
 import { use } from "react";
-import { useSplashScreen } from "../hooks/useSplashScreen";
 import { AddWordButton } from "../components/AddWordButton";
+import { SettingsButton } from "../components/SettingsButton";
+import { useSplashScreen } from "../hooks/useSplashScreen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,8 +28,22 @@ function Screens() {
 
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ title: "Lexicon", headerRight: AddWordButton }} />
-      <Stack.Screen name="words/add" options={{ title: "New Word" }} />
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Lexicon",
+          headerLeft: SettingsButton,
+          headerRight: AddWordButton,
+        }}
+      />
+      <Stack.Screen
+        name="words/add"
+        options={{ title: "New Word", headerBackButtonDisplayMode: "minimal" }}
+      />
+      <Stack.Screen
+        name="settings"
+        options={{ title: "Settings", headerBackButtonDisplayMode: "minimal" }}
+      />
     </Stack>
   );
 }
