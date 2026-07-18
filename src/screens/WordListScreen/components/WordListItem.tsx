@@ -1,4 +1,5 @@
-import { WordsContext } from "@/src/providers/wordsProvider";
+import { LxText } from "@/src/components/LxText";
+import { WordsContext } from "@/src/providers/WordsProvider";
 import { Word } from "@/src/types/word";
 import { Ionicons } from "@expo/vector-icons";
 import { use, useState } from "react";
@@ -59,7 +60,7 @@ export function WordListItem({ word }: WordListItemProps) {
       <Pressable onPress={handleToggleExpanded}>
         <View style={styles.container}>
           <View style={styles.headerRow}>
-            <Text style={styles.content}>{word.content}</Text>
+            <LxText style={styles.content}>{word.content}</LxText>
             <Animated.View style={chevronAnimatedStyle}>
               <Ionicons name="chevron-up" size={20} color="#666" />
             </Animated.View>

@@ -1,7 +1,7 @@
 import { use } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { LxButton } from "../components/LxButton";
-import { WordsContext } from "../providers/wordsProvider";
+import { WordsContext } from "../providers/WordsProvider";
 import * as ioService from "../services/ioService";
 
 export function SettingsScreen() {
@@ -60,7 +60,6 @@ export function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
     padding: 16,
     gap: 16,
   },

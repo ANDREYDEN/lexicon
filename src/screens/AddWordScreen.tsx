@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { LxButton } from "../components/LxButton";
 import { LxTextArea } from "../components/LxTextArea";
 import { LxTextInput } from "../components/LxTextInput";
-import { WordsContext } from "../providers/wordsProvider";
+import { WordsContext } from "../providers/WordsProvider";
 import { Word } from "../types/word";
 
 export function AddWordScreen() {
@@ -47,7 +47,6 @@ export function AddWordScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
     padding: 16,
     gap: 16,
   },

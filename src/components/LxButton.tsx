@@ -4,10 +4,12 @@ import {
   Pressable,
   PressableProps,
   StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from "react-native";
+import { useTheme } from "../providers/ThemeProvider";
+import { Spacing } from "../styling/spacing";
+import { LxText } from "./LxText";
 
 interface LxButtonProps extends Omit<PressableProps, "children"> {
   title: string;
@@ -23,16 +25,31 @@ export function LxButton({
   icon,
   ...props
 }: LxButtonProps) {
+  const theme = useTheme();
   const colorMap: Record<typeof variant, string> = {
-    primary: "#fff",
-    secondary: "#007AFF",
+    primary: theme.colors.onPrimary,
+    secondary: theme.colors.secondary,
   };
 
   return (
-    <Pressable style={[styles.button, styles[variant], style]} {...props}>
+    <Pressable
+      style={[
+        styles.button,
+        variant === "primary" && { backgroundColor: theme.colors.primary },
+        variant === "secondary" && {
+          borderWidth: 1,
+          borderColor: theme.colors.secondary,
+          backgroundColor: theme.colors.background,
+        },
+        style,
+      ]}
+      {...props}
+    >
       <View style={styles.content}>
         {icon && <Ionicons name={icon} size={24} color={colorMap[variant]} />}
-        <Text style={[styles.text, { color: colorMap[variant] }]}>{title}</Text>
+        <LxText style={[styles.text, { color: colorMap[variant] }]}>
+          {title}
+        </LxText>
       </View>
     </Pressable>
   );
@@ -40,20 +57,12 @@ export function LxButton({
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 32,
-    paddingVertical: 12,
+    paddingHorizontal: Spacing.xl_32,
+    paddingVertical: Spacing.sm_8,
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
     elevation: 3,
-  },
-  primary: {
-    backgroundColor: "#007AFF",
-  },
-  secondary: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#007AFF",
   },
   text: {
     fontSize: 16,
