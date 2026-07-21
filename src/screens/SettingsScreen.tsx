@@ -1,11 +1,24 @@
 import { use } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { LxButton } from "../components/LxButton";
+import { LxSwitch } from "../components/LxSwitch";
+import { NotificationsContext } from "../providers/NotificationsProvider";
 import { WordsContext } from "../providers/WordsProvider";
 import * as ioService from "../services/ioService";
 
 export function SettingsScreen() {
   const { words, importWords } = use(WordsContext);
+  const { settings, setNotificationsEnabled } = use(NotificationsContext);
+
+  const handleToggleNotifications = async (next: boolean) => {
+    const applied = await setNotificationsEnabled(next);
+    if (next && !applied) {
+      Alert.alert(
+        "Permission Needed",
+        "Enable notifications for Lexicon in your device settings to receive word reminders.",
+      );
+    }
+  };
 
   const handleExport = () => {
     ioService.exportWords(words);
@@ -41,6 +54,11 @@ export function SettingsScreen() {
 
   return (
     <View style={styles.container}>
+      <LxSwitch
+        label="Word Reminders"
+        value={settings.notificationsEnabled}
+        onValueChange={handleToggleNotifications}
+      />
       <LxButton
         title="Export Data"
         variant="secondary"

@@ -6,6 +6,10 @@ import { use } from "react";
 import { AddWordButton } from "../components/AddWordButton";
 import { SettingsButton } from "../components/SettingsButton";
 import { useSplashScreen } from "../hooks/useSplashScreen";
+import {
+  NotificationsContext,
+  NotificationsProvider,
+} from "../providers/NotificationsProvider";
 import { ThemeProvider } from "../providers/ThemeProvider";
 import { WordsContext, WordsProvider } from "../providers/WordsProvider";
 import { useScreenStyle } from "../styling/useScreenStyle";
@@ -17,7 +21,9 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <ThemeProvider>
         <WordsProvider>
-          <Screens />
+          <NotificationsProvider>
+            <Screens />
+          </NotificationsProvider>
         </WordsProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
@@ -27,7 +33,10 @@ export default function RootLayout() {
 function Screens() {
   const screenStyle = useScreenStyle();
   const { loadWords } = use(WordsContext);
-  const isReady = useSplashScreen(loadWords);
+  const { loadNotificationSettings } = use(NotificationsContext);
+  const isReady = useSplashScreen(async () => {
+    await Promise.all([loadWords(), loadNotificationSettings()]);
+  });
 
   if (!isReady) return null;
 
