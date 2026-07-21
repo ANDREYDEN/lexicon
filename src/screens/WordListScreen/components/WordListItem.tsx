@@ -2,7 +2,7 @@ import { LxText } from "@/src/components/LxText";
 import { WordsContext } from "@/src/providers/WordsProvider";
 import { Word } from "@/src/types/word";
 import { Ionicons } from "@expo/vector-icons";
-import { use, useState } from "react";
+import { use } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import Animated, {
@@ -13,18 +13,19 @@ import Animated, {
 
 interface WordListItemProps {
   word: Word;
+  isExpanded: boolean;
+  onToggleExpanded: () => void;
 }
 
-export function WordListItem({ word }: WordListItemProps) {
+export function WordListItem({
+  word,
+  isExpanded,
+  onToggleExpanded,
+}: WordListItemProps) {
   const { deleteWord } = use(WordsContext);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleDelete = () => {
     deleteWord(word);
-  };
-
-  const handleToggleExpanded = () => {
-    setIsExpanded(!isExpanded);
   };
 
   const chevronAnimatedStyle = useAnimatedStyle(() => {
@@ -57,7 +58,7 @@ export function WordListItem({ word }: WordListItemProps) {
       )}
       friction={2}
     >
-      <Pressable onPress={handleToggleExpanded}>
+      <Pressable onPress={onToggleExpanded}>
         <View style={styles.container}>
           <View style={styles.headerRow}>
             <LxText style={styles.content}>{word.content}</LxText>

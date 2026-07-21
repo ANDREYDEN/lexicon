@@ -1,5 +1,7 @@
 import { WordListScreen } from "@/src/screens/WordListScreen/WordListScreen";
+import { useLocalSearchParams } from "expo-router";
 
 export default function Index() {
-  return <WordListScreen />;
+  const { word } = useLocalSearchParams<{ word?: string }>();
+  return <WordListScreen key={word} targetWord={word} />;
 }

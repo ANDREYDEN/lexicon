@@ -2,7 +2,7 @@ import { use } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { LxButton } from "../components/LxButton";
 import { LxSwitch } from "../components/LxSwitch";
-import { NotificationsContext } from "../providers/NotificationsProvider";
+import { NotificationsContext } from "../providers/NotificationsProvider/NotificationsProvider";
 import { WordsContext } from "../providers/WordsProvider";
 import * as ioService from "../services/ioService";
 

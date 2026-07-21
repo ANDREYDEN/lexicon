@@ -1,6 +1,7 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { Word } from "../types/word";
+import { WordReminderNotificationData } from "./notificationService.types";
 
 const WINDOW_DAYS = 14;
 const NOTIFICATION_HOUR = 9;
@@ -36,8 +37,11 @@ export async function rescheduleAll(words: Word[]): Promise<void> {
     const date = nextOccurrenceAt(dayOffset, now);
     if (!date) continue;
     const word = pickRandomWord(words);
+    const notificationData: WordReminderNotificationData = {
+      wordContent: word.content,
+    };
     await Notifications.scheduleNotificationAsync({
-      content: { title: word.content },
+      content: { title: word.content, data: notificationData },
       trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date },
     });
   }
@@ -49,6 +53,19 @@ export async function cancelAll(): Promise<void> {
   console.log("notifications cancelled");
 }
 
+export function getInitialTargetWord(): string | undefined {
+  const response = Notifications.getLastNotificationResponse();
+  return getWordContentFromResponse(response);
+}
+
+export function addResponseListener(
+  callback: (wordContent: string | undefined) => void,
+) {
+  return Notifications.addNotificationResponseReceivedListener((response) =>
+    callback(getWordContentFromResponse(response)),
+  );
+}
+
 async function ensureAndroidChannel(): Promise<void> {
   await Notifications.setNotificationChannelAsync(ANDROID_CHANNEL_ID, {
     name: "New Word Reminder",
@@ -58,6 +75,15 @@ async function ensureAndroidChannel(): Promise<void> {
 
 function pickRandomWord(words: Word[]): Word {
   return words[Math.floor(Math.random() * words.length)];
+}
+
+function getWordContentFromResponse(
+  response: Notifications.NotificationResponse | null,
+): string | undefined {
+  const data = response?.notification?.request?.content?.data as
+    | WordReminderNotificationData
+    | undefined;
+  return data?.wordContent;
 }
 
 function nextOccurrenceAt(dayOffset: number, now: Date): Date | undefined {

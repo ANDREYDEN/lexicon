@@ -9,7 +9,7 @@ import { useSplashScreen } from "../hooks/useSplashScreen";
 import {
   NotificationsContext,
   NotificationsProvider,
-} from "../providers/NotificationsProvider";
+} from "../providers/NotificationsProvider/NotificationsProvider";
 import { ThemeProvider } from "../providers/ThemeProvider";
 import { WordsContext, WordsProvider } from "../providers/WordsProvider";
 import { useScreenStyle } from "../styling/useScreenStyle";
@@ -41,7 +41,7 @@ function Screens() {
   if (!isReady) return null;
 
   return (
-    <Stack screenOptions={{ ...screenStyle, }}>
+    <Stack screenOptions={{ ...screenStyle }}>
       <Stack.Screen
         name="index"
         options={{
